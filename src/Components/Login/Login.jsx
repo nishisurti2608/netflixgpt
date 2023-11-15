@@ -1,11 +1,27 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import Header from "../Header/Header";
+import { checkValidData } from "../../Utils/validate";
 
 const Login = () => {
   const [isSignIn, setIsSignIn] = useState(true);
+  const [errorMessage, setErrorMessage] = useState(null);
+  const email = useRef(null);
+  const password = useRef(null);
+  const name = useRef(null);
 
   const SignUpForm = () => {
     setIsSignIn(!isSignIn);
+  };
+
+  const handleButtonClick = () => {
+    //validate form Data
+
+    const message = checkValidData(
+      email.current.value,
+      password.current.value,
+      name.current.value
+    );
+    setErrorMessage(message);
   };
   return (
     <div>
@@ -17,21 +33,38 @@ const Login = () => {
           alt="netflix-login-bg"
         />
       </div>
-      <form className="absolute p-12 bg-black w-3/12 my-36 mx-auto left-0 right-0 rounded-md bg-opacity-50">
+      <form
+        onSubmit={(e) => e.preventDefault()}
+        className="absolute p-12 bg-black w-3/12 my-36 mx-auto left-0 right-0 rounded-md bg-opacity-50"
+      >
         <h1 className="font-bold text-4xl text-white py-4 px-4 ">
           {isSignIn ? "Sign In" : "Sign Up"}
         </h1>
+        {!isSignIn && (
+          <input
+            ref={name}
+            type="text"
+            placeholder="Enter your name"
+            className="p-2 m-2 w-10/12 rounded-md bg-gray-900 focus:outline-none  focus:border-orange-500 focus:ring-1 focus:ring-orange-500 text-white"
+          />
+        )}
         <input
           type="text"
+          ref={email}
           placeholder="Email or phone number"
-          className="p-2 m-2 w-10/12 rounded-md bg-gray-900"
+          className="p-2 m-2 w-10/12 rounded-md bg-gray-900  focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 text-white"
         />
         <input
           type="password"
+          ref={password}
           placeholder="Password"
-          className="p-2 m-2 w-10/12 rounded-md bg-gray-900"
+          className="p-2 m-2 w-10/12 rounded-md bg-gray-900  focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 text-white"
         />
-        <button className="flex items-center justify-center p-4 m-3 my-6 bg-red-700 w-10/12 h-12 rounded-md text-white text-center">
+        <p className="mt-2 m-2 text-sm text-orange-600">{errorMessage}</p>
+        <button
+          className="flex items-center justify-center p-4 m-3 my-6 bg-red-700 w-10/12 h-12 rounded-md text-white text-center "
+          onClick={handleButtonClick}
+        >
           {isSignIn ? "Sign In" : "Sign Up"}
         </button>
         <input
